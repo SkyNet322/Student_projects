@@ -62,3 +62,17 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Launch Instructions
+
+//RU
+1. Запускаем программу Docker Desktop
+2. Запускаем программу Ubuntu
+3. В Ubuntu вводим все следующие команды:
+	cd <папка нашего проекта>
+	docker run -v $(pwd):/app composer /bin/bash -c "composer install --ignore-platform-reqs"
+	cp .env.example .env
+	./vendor/bin/sail up -d
+Далее, на сайт можно перейти по localhost
+Если при попытке войти выдаёт ошибку несгенерированного ключа, то дополнительно в папке проекта вводим ./vendor/bin/sail artisan key:generate
+Редактировать код можно с помощью вызова: code . из папки проекта
