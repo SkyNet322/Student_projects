@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CalcController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
   
         return('logout');
     });
+
+    route::post('/calculate', [CalcController::class, 'calculate' ]);
 });

@@ -72,7 +72,20 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 	cd <папка нашего проекта>
 	docker run -v $(pwd):/app composer /bin/bash -c "composer install --ignore-platform-reqs"
 	cp .env.example .env
+4. Открываем .env и заполняем соответвующие поля следующим образом:
+	DB_CONNECTION=pgsql
+	DB_HOST=pgsql
+	DB_PORT=5432
+	DB_DATABASE=user
+	DB_USERNAME=root
+	DB_PASSWORD=root
+	//поля название базы, пароль базы можно называть по-другому
+5. Продолжаем вводить команды в ubuntu -> <папка нашего проекта>
 	./vendor/bin/sail up -d
+	./vendor/bin/sail artisan migrate
+	./vendor/bin/sail artisan db:seed
+6. Для загрузки таблицы с GUID необходимо использовать следующую команду: ./vendor/bin/sail artisan load:data
+	
 Далее, на сайт можно перейти по localhost
 Если при попытке войти выдаёт ошибку несгенерированного ключа, то дополнительно в папке проекта вводим ./vendor/bin/sail artisan key:generate
 Редактировать код можно с помощью вызова: code . из папки проекта
