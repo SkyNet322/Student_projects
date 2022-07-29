@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,5 +23,26 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        DB::table('users')->truncate();
+        
+        $users = [
+            ['Выхлоп', 'Вадим', 'Викторович'],
+            ['Гордон', 'Саня', 'Александрович'],
+            ['Русской', 'Коля', 'Рюрикович'],
+            ['Зверь', 'Виктор', 'Маленович'],
+            ['Забугорный', 'Ахмед', 'Константинович']
+        ];
+
+        foreach($users as $key => $user) {
+            DB::table('users')->insert(
+                [
+                    'surname' => $user[0],
+                    'name' => $user[1],
+                    'patronymic' => $user[2],
+                    'login' => 'manager' . ($key + 1),
+                    'password' => Hash::make('12345')
+                ]
+                );
+        }
     }
 }
