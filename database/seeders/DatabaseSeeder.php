@@ -66,51 +66,5 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
-
-        // Засидим команду развития
-
-        DB::table('personnels')->truncate();
-
-        $users = [
-            ['Разработчик', '1', '10%', '10000', '24'],
-            ['Тестировщик', '0.5', '10%', '20000', '6'],
-            ['Аналитик', '1', '10%', '30000', '36'],
-            ['Гусар', '1.5', '10%', '40000', '12'],
-            ['Тимлид', '2', '10%', '50000', '48']
-        ];
-
-        foreach($users as $key => $user) {
-            DB::table('personnels')->insert(
-                [
-                    'post' => $user[0],
-                    'quantity_of_the_rate' => $user[1],
-                    'unified_social_tax' => $user[2],
-                    'wage' => $user[3],
-                    'number_of_month_of_work' => $user[4],
-                ]
-            );
-        }
-
-        // теперь команду сопровождения
-
-        $users = [
-            ['Уборщик', '1', '10%', '10000', '24'],
-            ['Пекарь', '0.5', '10%', '20000', '6'],
-            ['Менеджер по продажам', '1', '10%', '30000', '36'],
-            ['Графический художник', '1.5', '10%', '40000', '12'],
-            ['Директор ханты-мансийского филиала', '2', '10%', '500000', '48']
-        ];
-
-        foreach($users as $key => $user) {
-            DB::table('personnels')->insert(
-                [
-                    'post' => $user[0],
-                    'quantity_of_the_rate' => $user[1],
-                    'unified_social_tax' => $user[2],
-                    'wage' => $user[3],
-                    'number_of_month_of_work' => $user[4],
-                ]
-            );
-        }
     }
 }

@@ -17,15 +17,7 @@ class calculate extends Model
     }
     use HasFactory;
     protected $fillable = [
-        'item',
-        'type',
-        'description',
-        'inflic_1_year',
-        'inflic_2_year',
-        'inflic_3_year',
-        'inflic_4_year',
-        'inflic_5_year',
-        'total'
+        'user_id',
     ];
 
 }

@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('inflics', function (Blueprint $table) {
             $table->id();
-            $table->integer('calculate_id')->nullable();
             $table->string('item')->nullable();
             $table->string('type')->nullable();
             $table->string('description')->nullable();

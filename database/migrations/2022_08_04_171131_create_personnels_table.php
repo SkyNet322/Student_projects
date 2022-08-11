@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('personnels', function (Blueprint $table) {
             $table->id();
+           /* $table->integer('calculate_id');
+            $table->index('calculate_id');*/
             $table->string('post')->nullable();
             $table->float('quantity_of_the_rate')->nullable();
             $table->string('unified_social_tax')->nullable();

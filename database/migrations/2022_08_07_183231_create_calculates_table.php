@@ -15,17 +15,21 @@ return new class extends Migration
     {
         Schema::create('calculates', function (Blueprint $table) {
             $table->id();
-            $table->string('item')->nullable();
-            $table->string('type')->nullable();
-            $table->string('description')->nullable();
-            $table->bigInteger('inflic_1_year')->nullable();
-            $table->bigInteger('inflic_2_year')->nullable();
-            $table->bigInteger('inflic_3_year')->nullable();
-            $table->bigInteger('inflic_4_year')->nullable();
-            $table->bigInteger('inflic_5_year')->nullable();
-            $table->bigInteger('total')->nullable();
+            $table->integer('user_id');
             $table->timestamps();
         });
+
+        Schema::table('personnels', function (Blueprint $table) {
+            $table->integer('calculate_id')->nullable();
+            $table->foreign('calculate_id')->references('id')->on('calculates')->onDelete('cascade');;
+        });
+
+        Schema::table('inflics', function (Blueprint $table) {
+            $table->integer('calculate_id')->nullable();
+            $table->foreign('calculate_id')->references('id')->on('calculates');
+        });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -35,6 +39,10 @@ return new class extends Migration
      */
     public function down()
     {
+       Schema::table('inflics', function($table) {
+            $table->dropForeign('inflics_calculate_id_foreign');
+            $table->dropColumn('calculate_id');
+        });
         Schema::dropIfExists('calculates');
     }
 };

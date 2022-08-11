@@ -25,9 +25,13 @@ Route::middleware('auth:sanctum')->group(function () {
         return('Ты авторизован');
     });
 
+    route::get('/sendinfra', [UseDataController::class, 'sendinfra' ]);
+
+    route::get('/sendlicen', [UseDataController::class, 'sendlicen' ]);
+
     route::post('/usedata', [UseDataController::class, 'useguid' ]);
 
-    route::post('/getinfralicen', [GetController::class, 'getinfralicen' ]);
+    route::post('/getall', [GetController::class, 'get' ]);
 
     route::post('/calculate', [CalcController::class, 'calculate' ]);
 

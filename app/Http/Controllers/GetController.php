@@ -3,107 +3,86 @@
 namespace App\Http\Controllers;
 
 use App\Models\inflic;
+use App\Models\personnel;
+use App\Models\calculate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\In;
+use Illuminate\Support\Facades\Auth;
+use function Ramsey\Uuid\v1;
+
 
 class GetController extends Controller
 {
-    public function getinfralicen(request $request) {
-        $massive = [
-            [
-                $request->type,
-                $request->value1,
-                $request->value2,
-                $request->value3,
-                $request->value4,
-                $request->value5,
-                $request->value6,
-                $request->value7,
-                $request->value8,
-                $request->value9,
-                $request->value10,
-                $request->value11,
-                $request->value12,
-                $request->value13,
-                $request->value14,
-                $request->value15
-            ],
-            [
-                $request->value16,
-                $request->value17,
-                $request->value18,
-                $request->value19,
-                $request->value20,
-                $request->value21,
-                $request->value22,
-                $request->value23,
-                $request->value24,
-                $request->value25,
-                $request->value26,
-                $request->value27,
-                $request->value28,
-                $request->value29,
-                $request->value30
-            ],
+    public function get(request $request) {
+        $data = [
+            'inflic' => $request->inflics,
+            'personnel' => $request->personnels,
         ];
+
        // return($massive[0][0]);
+        $calc = new calculate();
+        $calc->user_id = Auth::id();
+        $calc->save();
+
+        $this->createinflics($data['inflic'], $calc->id);
+        $this->createpersonnels($data['personnel'], $calc->id);
 
 
-        $type = $massive[0][0];
-        if ($type == "CAPEX") {
+        return("I saved all");
+    }
+
+    public function createinflics($data, $calculateid) {
+        //dd($calculateid);
+        //dd($data);
+        $data1 = $data['infra'];
+        if ($data1['type']== "CAPEX") {
             $infr = inflic::find(1);
         }
         else {
             $infr = inflic::find(2);
         }
-        $infr->calculate_id = 1;
-        $infr->inflic_1_year = $massive[0][1];
-        $infr->inflic_2_year = $massive[0][2];
-        $infr->inflic_3_year = $massive[0][3];
-        $infr->inflic_4_year = $massive[0][4];
-        $infr->inflic_5_year = $massive[0][5];
-        $infr->save();
-        $infr = inflic::find(3);
-        $infr->calculate_id = 2;
-        $infr->inflic_1_year = $massive[0][6];
-        $infr->inflic_2_year = $massive[0][7];
-        $infr->inflic_3_year = $massive[0][8];
-        $infr->inflic_4_year = $massive[0][9];
-        $infr->inflic_5_year = $massive[0][10];
-        $infr->save();
-        $infr = inflic::find(4);
-        $infr->calculate_id = 3;
-        $infr->inflic_1_year = $massive[0][11];
-        $infr->inflic_2_year = $massive[0][12];
-        $infr->inflic_3_year = $massive[0][13];
-        $infr->inflic_4_year = $massive[0][14];
-        $infr->inflic_5_year = $massive[0][15];
-        $infr->save();
-        $lics = inflic::find(5);
-        $lics->calculate_id = 4;
-        $lics->inflic_1_year = $massive[1][0];
-        $lics->inflic_2_year = $massive[1][1];
-        $lics->inflic_3_year = $massive[1][2];
-        $lics->inflic_4_year = $massive[1][3];
-        $lics->inflic_5_year = $massive[1][4];
-        $lics->save();
-        $lics = inflic::find(6);
-        $lics->calculate_id = 5;
-        $lics->inflic_1_year = $massive[1][5];
-        $lics->inflic_2_year = $massive[1][6];
-        $lics->inflic_3_year = $massive[1][7];
-        $lics->inflic_4_year = $massive[1][8];
-        $lics->inflic_5_year = $massive[1][9];
-        $lics->save();
-        $lics = inflic::find(7);
-        $lics->calculate_id = 6;
-        $lics->inflic_1_year = $massive[1][10];
-        $lics->inflic_2_year = $massive[1][11];
-        $lics->inflic_3_year = $massive[1][12];
-        $lics->inflic_4_year = $massive[1][13];
-        $lics->inflic_5_year = $massive[1][14];
-        $lics->save();
-        return($lics);
+        unset($data1['type']);
+        $j=2;
+        foreach($data1 as $object) {
+            $infr->calculate_id = $calculateid;
+            $infr->inflic_1_year = $object['1year'];
+            $infr->inflic_2_year = $object['2year'];
+            $infr->inflic_3_year = $object['3year'];
+            $infr->inflic_4_year = $object['4year'];
+            $infr->inflic_5_year = $object['5year'];
+            $infr->save();
+            if ($j < 4) {
+                $j++;
+                $infr = inflic::find($j);
+            }
+
+        }
+        $data1 = $data['licen'];
+        $j=5;
+        foreach($data1 as $object) {
+            $lics = inflic::find($j);
+            $lics->calculate_id = $calculateid;
+            $lics->inflic_1_year = $object['1year'];
+            $lics->inflic_2_year = $object['2year'];
+            $lics->inflic_3_year = $object['3year'];
+            $lics->inflic_4_year = $object['4year'];
+            $lics->inflic_5_year = $object['5year'];
+            $lics->save();
+            if ($j < 7) $j++;
+        }
+    }
+    public function createpersonnels($employees, $calculateid) {
+        //dd($employees);
+        foreach($employees as $employee) {
+            $worker = new personnel();
+            $worker->calculate_id = $calculateid;
+            $worker->post = $employee['post'];
+            $worker->quantity_of_the_rate = $employee['quantity_of_the_rate'];
+            $worker->unified_social_tax = $employee['unified_social_tax'];
+            $worker->wage = $employee['wage'];
+            $worker->number_of_month_of_work = $employee['number_of_month_of_work'];
+            $worker->save();
+        }
     }
 }
