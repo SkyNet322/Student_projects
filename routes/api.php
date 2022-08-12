@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     route::post('/getall', [GetController::class, 'get' ]);
 
-    route::post('/calculate', [CalcController::class, 'calculate' ]);
+    route::get('/calculate', [CalcController::class, 'calculate' ]);
 
     route::get('/logout', function () {
 

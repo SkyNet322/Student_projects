@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
             ['Аутсорс информационной системы', 'OPEX', 'Укажите стоимость аутсорса информационной системы. Затраты берутся из контракта на аутсорс']
         ];
 
-        foreach($data as $key => $dat) {
+       /* foreach($data as $key => $dat) {
             DB::table('inflics')->insert(
                 [
                     'item' => $dat[0],
@@ -65,6 +65,6 @@ class DatabaseSeeder extends Seeder
                     'description' => $dat[2],
                 ]
             );
-        }
+        }*/
     }
 }

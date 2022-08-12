@@ -9,7 +9,7 @@ class inflic extends Model
 {
     use HasFactory;
     protected $fillable = [
-       // 'calculate_id',
+        'calculate_id',
         'item',
         'type',
         'description',
