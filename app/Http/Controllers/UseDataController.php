@@ -40,7 +40,10 @@ class UseDataController extends Controller
         }
     }
 
-    public function sendinfra()
+    public function sendguid() {
+        return(DataSpecial::all());
+    }
+    /* Устарело: public function sendinfra()
     {
 
         $massive = [];
@@ -55,9 +58,9 @@ class UseDataController extends Controller
         }
 
         return($massive);
-    }
+    }*/
 
-    public function sendlicen()
+   /* Устарело: public function sendlicen()
     {
 
         $massive = [];
@@ -72,5 +75,7 @@ class UseDataController extends Controller
         }
 
         return($massive);
-    }
+    }*/
+
+
 }
