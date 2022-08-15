@@ -223,10 +223,24 @@ class GetController extends Controller
             if ($j < 7) $j++;
         }*/
     }
-    public function createpersonnels($employees, $calculateid) {
-        //dd($employees);
+    public function createpersonnels($data, $calculateid) {
+        //dd($data);
+        $employees = $data['development'];
         foreach($employees as $employee) {
             $worker = new personnel();
+            $worker->team = 'development';
+            $worker->calculate_id = $calculateid;
+            $worker->post = $employee['post'];
+            $worker->quantity_of_the_rate = $employee['quantity_of_the_rate'];
+            $worker->unified_social_tax = $employee['unified_social_tax'];
+            $worker->wage = $employee['wage'];
+            $worker->number_of_month_of_work = $employee['number_of_month_of_work'];
+            $worker->save();
+        }
+        $employees = $data['support'];
+        foreach($employees as $employee) {
+            $worker = new personnel();
+            $worker->team = 'support';
             $worker->calculate_id = $calculateid;
             $worker->post = $employee['post'];
             $worker->quantity_of_the_rate = $employee['quantity_of_the_rate'];
