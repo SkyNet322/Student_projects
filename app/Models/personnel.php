@@ -9,6 +9,7 @@ class personnel extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'team',
         'post',
         'quantity_of_the_rate',
         'unified_social_tax',
