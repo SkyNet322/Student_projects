@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\DataSpecial;
+use App\Models\connect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\lessThanOrEqual;
 use App\Models\inflic;
+use Illuminate\Support\Facades\Auth;
 
 class UseDataController extends Controller
 {
@@ -20,7 +22,22 @@ class UseDataController extends Controller
         {
             $guid = (new DataSpecial)->where('GUID', '=', $data['GUID'])->first();
             if($guid) {
-                return("TRUE");
+
+                connect::updateOrCreate(
+                    [
+                        'user_id' => Auth::id(),
+                        'guid_id' => $guid->id,
+                    ],
+                    [
+                        'guid_id' => $guid->id,
+                    ]);
+
+
+
+               // $some = new connect;
+               // $some->guid_id = $guid->id;
+               // $some->save();
+                return($guid->id);
             }
             else {
                 return ("something wrong");
@@ -29,9 +46,25 @@ class UseDataController extends Controller
         else
         {
             if ($data['nameIS']) {
+
                 $guid = (new DataSpecial)->where('name', '=', $data['nameIS'])->first();
+
                 if ($guid) {
-                    return("TRUE");
+
+                    connect::updateOrCreate(
+                        [
+                            'user_id' => Auth::id(),
+                            'guid_id' => $guid->id,
+                        ],
+                        [
+                            'guid_id' => $guid->id,
+                        ]);
+
+
+                    //$some = new connect;
+                    //$some->guid_id = $guid->id;
+                    //$some->save();
+                    return($guid->id);
                 } else {
                     return ("something wrong");
                 }

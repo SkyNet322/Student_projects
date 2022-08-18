@@ -21,4 +21,8 @@ class DataSpecial extends Model
         'domain',
         'subdomain',
     ];
+    public function connects()
+    {
+        return $this->hasOne(connects::class);
+    }
 }
