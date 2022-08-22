@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\calculate;
+use App\Models\connect;
 use App\Models\DataSpecial;
 use App\Models\personnel;
 use App\Models\inflic;
@@ -12,12 +13,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CalcController extends Controller
 {
-    public function calculate(){
+    public function calculate(request $request){
        // dd($request->all());
         // TODO validation
         // Model save
 
         //calculate
+        $identificator = $request->guidid;
         $tsoCAPEX = [
             '1year' => 0,
             '2year' => 0,
@@ -33,7 +35,11 @@ class CalcController extends Controller
             '5year' => 0,
         ];
         $massive = [];
-        $data = inflic::all();
+        $ggg = connect::where( [
+            ['user_id', '=', Auth::id()],
+            ['guid_id', '=', $identificator]
+            ] )->first();
+        $data = inflic::where('connect_id', '=', $ggg->id)->get();
         foreach($data as $dat) {
             array_push($massive,
             [
@@ -73,7 +79,7 @@ class CalcController extends Controller
 
         $team = personnel::where([
             ['team', '=', 'development'],
-            ['calculate_id', '=', (calculate::orderBy('id', 'desc')->first())->id]
+            ['connect_id', '=', $ggg->id]
             ])->get();
         $massive = [
             '1year' => 0,
@@ -91,7 +97,7 @@ class CalcController extends Controller
         $massive = [];
         $team = personnel::where([
             ['team', '=', 'support'],
-            ['calculate_id', '=', (calculate::orderBy('id', 'desc')->first())->id]
+            ['connect_id', '=', $ggg->id]
         ])->get();
 
         $massive = [

@@ -28,6 +28,20 @@ return new class extends Migration
             $table->string('subdomain')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('connects', function (Blueprint $table) {
+            $table->id();
+            //$table->integer('guid_id');
+            $table->integer('user_id');
+            $table->timestamps();
+        });
+
+        Schema::table('connects', function (Blueprint $table) {
+            $table->integer('guid_id')->nullable()->unsigned();
+            $table->foreign('guid_id')->references('id')->on('data_specials')->onDelete('cascade');;
+        });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

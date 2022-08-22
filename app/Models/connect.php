@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class calculate extends Model
+class connect extends Model
 {
-    /*public function inflics()
+    public function inflics()
     {
         return $this->hasMany(inflic::class);
     }
@@ -15,9 +15,10 @@ class calculate extends Model
     {
         return $this->hasMany(personnel::class);
     }
-    use HasFactory;*/
+    use HasFactory;
+    use HasFactory;
     protected $fillable = [
         'user_id',
+        'guid_id',
     ];
-
 }
