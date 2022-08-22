@@ -20,7 +20,7 @@ class GetController extends Controller
      * @param Request $request
      * @return string
      */
-    public function get(request $request): string
+    public function store(request $request): string
     {
         $data = [
             'inflic' => $request->inflics,

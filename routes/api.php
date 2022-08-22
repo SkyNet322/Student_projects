@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     route::post('/usedata', [UseDataController::class, 'useguid' ]);
 
-    route::post('/getall', [GetController::class, 'get' ]);
+    route::post('/getall', [GetController::class, 'store' ]);
 
     route::get('/calculate/{guid_id}', [CalcController::class, 'calculate']);
 
