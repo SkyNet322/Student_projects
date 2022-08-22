@@ -5,8 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class connect extends Model
+class Connect extends Model
 {
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'guid_id',
+    ];
+
     public function inflics()
     {
         return $this->hasMany(inflic::class);
@@ -15,10 +22,9 @@ class connect extends Model
     {
         return $this->hasMany(personnel::class);
     }
-    use HasFactory;
-    use HasFactory;
-    protected $fillable = [
-        'user_id',
-        'guid_id',
-    ];
+
+    public function dataSpecial()
+    {
+        return $this->belongsTo(DataSpecial::class);
+    }
 }

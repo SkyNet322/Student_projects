@@ -13,19 +13,34 @@ return new class extends Migration
      */
     public function up()
     {
-       /* Schema::create('connects', function (Blueprint $table) {
+        Schema::create('connects', function (Blueprint $table) {
             $table->id();
-            //$table->integer('guid_id');
+            $table->integer('user_id');
+            $table->integer('guid_id')->nullable()->unsigned();
             $table->timestamps();
-        });*/
+
+            $table->foreign('guid_id')
+                ->references('id')
+                ->on('data_specials')
+                ->onDelete('cascade');
+
+        });
+
         Schema::table('personnels', function (Blueprint $table) {
             $table->integer('connect_id')->nullable();
-            $table->foreign('connect_id')->references('id')->on('connects')->onDelete('cascade');;
+
+            $table->foreign('connect_id')
+                ->references('id')
+                ->on('connects')
+                ->onDelete('cascade');
         });
 
         Schema::table('inflics', function (Blueprint $table) {
             $table->integer('connect_id')->nullable();
-            $table->foreign('connect_id')->references('id')->on('connects');
+
+            $table->foreign('connect_id')
+                ->references('id')
+                ->on('connects');
         });
 
     }

@@ -16,117 +16,112 @@ use function Ramsey\Uuid\v1;
 
 class GetController extends Controller
 {
-    public function get(request $request) {
+    /**
+     * @param Request $request
+     * @return string
+     */
+    public function get(request $request): string
+    {
         $data = [
             'inflic' => $request->inflics,
             'personnel' => $request->personnels,
-            'guidid' => $request->guidid,
+            'guid_id' => $request->guid_id,
         ];
 
-       // return($massive[0][0]);
-       /* $calc = new calculate();
-        $calc->user_id = Auth::id();
-        $calc->save();*/
+        $connect = Connect::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'guid_id' => $data['guid_id'],
+            ],
+            [
+                'guid_id' => $data['guid_id'],
+            ]
+        );
 
+        if (!$connect) {
+            return ('You are very megastuid');
+        }
 
+        $this->createInflics($data['inflic'], $connect->id);
+        $this->createPersonnels($data['personnel'], $connect->id);
 
-
-        //dd(Auth::id());
-        $ggg = connect::where( [
-            ['user_id', '=', Auth::id()],
-            ['guid_id', '=', $data['guidid']]
-            ] )->first();
-        //$ggg = connect::where('guid_id', '=', $data['guidid'])->where('user_id', '=', Auth::id())->get();
-        //dd($ggg);
-        if(!$ggg) { return('You are very megastuid'); }
-
-
-
-
-        $this->createinflics($data['inflic'], $ggg->id);
-        $this->createpersonnels($data['personnel'], $ggg->id);
-
-
-        return("I saved all");
+        return ("I saved all");
     }
 
-    public function createinflics($data, $calculateid) {
-        //dd($calculateid);
-        //dd($data);
+    /**
+     * @param $data
+     * @param $calculateid
+     * @return void
+     */
+    public function createInflics($data, $calculateid)
+    {
         $data1 = $data['infra'];
 
         if ($data1['type'] == "CAPEX") {
-             inflic::updateOrCreate(
-                 [
-                     'connect_id' => $calculateid,
-                 ],
-                 [
-                     //'calculate_id' => $calculateid,
-                     'item' => 'Стоимость инфраструктуры',
-                     'type' => 'CAPEX',
-                     'description' => 'Укажите общую стоимость инфраструктуры',
-                     'inflic_1_year' => $data1['object1']['1year'],
-                     'inflic_2_year' => $data1['object1']['2year'],
-                     'inflic_3_year' => $data1['object1']['3year'],
-                     'inflic_4_year' => $data1['object1']['4year'],
-                     'inflic_5_year' => $data1['object1']['5year'],
-                 ]
-             );
-             inflic::updateOrCreate(
-                 [
-                     'connect_id' => $calculateid,
-                     'item' => 'Стоимость инфраструктуры (облачная)',
-                     'type' => 'OPEX',
-                     'description' => 'Укажите общую стоимость инфраструктуры (облачной)',
-                 ],
-                 [
-                     //'calculate_id' => $calculateid,
-
-                     'inflic_1_year' => null,
-                     'inflic_2_year' => null,
-                     'inflic_3_year' => null,
-                     'inflic_4_year' => null,
-                     'inflic_5_year' => null,
-                 ]
-             );
-         }
-         else {
-             inflic::updateOrCreate(
-                 [
-                     'connect_id' => $calculateid,
-                     'item' => 'Стоимость инфраструктуры',
-                     'type' => 'CAPEX',
-                     'description' => 'Укажите общую стоимость инфраструктуры',
-                 ],
-                 [
-                     //'calculate_id' => $calculateid,
-
-                     'inflic_1_year' => null,
-                     'inflic_2_year' => null,
-                     'inflic_3_year' => null,
-                     'inflic_4_year' => null,
-                     'inflic_5_year' => null,
-                 ]
-             );
-             inflic::updateOrCreate(
-                 [
-                     'connect_id' => $calculateid,
-                     'item' => 'Стоимость инфраструктуры (облачная)',
-                     'type' => 'OPEX',
-                     'description' => 'Укажите общую стоимость инфраструктуры (облачной)',
-                 ],
-                 [
-                     //'calculate_id' => $calculateid,
-
-                     'inflic_1_year' => $data1['object1']['1year'],
-                     'inflic_2_year' => $data1['object1']['2year'],
-                     'inflic_3_year' => $data1['object1']['3year'],
-                     'inflic_4_year' => $data1['object1']['4year'],
-                     'inflic_5_year' => $data1['object1']['5year'],
-                 ]
-             );
-         }
-        inflic::updateOrCreate(
+            Inflic::updateOrCreate(
+                [
+                    'connect_id' => $calculateid,
+                ],
+                [
+                    //'calculate_id' => $calculateid,
+                    'item' => 'Стоимость инфраструктуры',
+                    'type' => 'CAPEX',
+                    'description' => 'Укажите общую стоимость инфраструктуры',
+                    'inflic_1_year' => $data1['object1']['1year'],
+                    'inflic_2_year' => $data1['object1']['2year'],
+                    'inflic_3_year' => $data1['object1']['3year'],
+                    'inflic_4_year' => $data1['object1']['4year'],
+                    'inflic_5_year' => $data1['object1']['5year'],
+                ]
+            );
+            Inflic::updateOrCreate(
+                [
+                    'connect_id' => $calculateid,
+                    'item' => 'Стоимость инфраструктуры (облачная)',
+                    'type' => 'OPEX',
+                    'description' => 'Укажите общую стоимость инфраструктуры (облачной)',
+                ],
+                [
+                    'inflic_1_year' => null,
+                    'inflic_2_year' => null,
+                    'inflic_3_year' => null,
+                    'inflic_4_year' => null,
+                    'inflic_5_year' => null,
+                ]
+            );
+        } else {
+            Inflic::updateOrCreate(
+                [
+                    'connect_id' => $calculateid,
+                    'item' => 'Стоимость инфраструктуры',
+                    'type' => 'CAPEX',
+                    'description' => 'Укажите общую стоимость инфраструктуры',
+                ],
+                [
+                    'inflic_1_year' => null,
+                    'inflic_2_year' => null,
+                    'inflic_3_year' => null,
+                    'inflic_4_year' => null,
+                    'inflic_5_year' => null,
+                ]
+            );
+            Inflic::updateOrCreate(
+                [
+                    'connect_id' => $calculateid,
+                    'item' => 'Стоимость инфраструктуры (облачная)',
+                    'type' => 'OPEX',
+                    'description' => 'Укажите общую стоимость инфраструктуры (облачной)',
+                ],
+                [
+                    'inflic_1_year' => $data1['object1']['1year'],
+                    'inflic_2_year' => $data1['object1']['2year'],
+                    'inflic_3_year' => $data1['object1']['3year'],
+                    'inflic_4_year' => $data1['object1']['4year'],
+                    'inflic_5_year' => $data1['object1']['5year'],
+                ]
+            );
+        }
+        Inflic::updateOrCreate(
             [
                 'connect_id' => $calculateid,
                 'item' => 'Сопровождение инфраструктуры',
@@ -134,8 +129,6 @@ class GetController extends Controller
                 'description' => 'Укажите общую стоимость сопровождения инфраструктуры (техническая поддержка инфраструктурного ПО и ФОТ обслуживающего персонала)',
             ],
             [
-                //'calculate_id' => $calculateid,
-
                 'inflic_1_year' => $data1['object2']['1year'],
                 'inflic_2_year' => $data1['object2']['2year'],
                 'inflic_3_year' => $data1['object2']['3year'],
@@ -143,7 +136,7 @@ class GetController extends Controller
                 'inflic_5_year' => $data1['object2']['5year'],
             ]
         );
-        inflic::updateOrCreate(
+        Inflic::updateOrCreate(
             [
                 'connect_id' => $calculateid,
                 'item' => 'Переферийное оборудование',
@@ -151,8 +144,6 @@ class GetController extends Controller
                 'description' => 'Укажите общую стоимость используемого переферийного оборудования в ИС',
             ],
             [
-                //'calculate_id' => $calculateid,
-
                 'inflic_1_year' => $data1['object3']['1year'],
                 'inflic_2_year' => $data1['object3']['2year'],
                 'inflic_3_year' => $data1['object3']['3year'],
@@ -161,11 +152,8 @@ class GetController extends Controller
             ]
         );
 
-
-        //dd($calculateid);
-
         $data1 = $data['licen'];
-        inflic::updateOrCreate(
+        Inflic::updateOrCreate(
             [
                 'connect_id' => $calculateid,
                 'item' => 'Переферийное оборудование',
@@ -173,8 +161,6 @@ class GetController extends Controller
                 'description' => 'Укажите общую стоимость используемого переферийного оборудования в ИС',
             ],
             [
-                //'calculate_id' => $calculateid,
-
                 'inflic_1_year' => $data1['object1']['1year'],
                 'inflic_2_year' => $data1['object1']['2year'],
                 'inflic_3_year' => $data1['object1']['3year'],
@@ -182,7 +168,7 @@ class GetController extends Controller
                 'inflic_5_year' => $data1['object1']['5year'],
             ]
         );
-        inflic::updateOrCreate(
+        Inflic::updateOrCreate(
             [
                 'connect_id' => $calculateid,
                 'item' => 'Стоимость технической поддержки информационной системы',
@@ -190,8 +176,6 @@ class GetController extends Controller
                 'description' => 'Укажите стоимость технической поддержки информационной системы. Затраты берутся из контракта на программное обеспечение',
             ],
             [
-                //'calculate_id' => $calculateid,
-
                 'inflic_1_year' => $data1['object2']['1year'],
                 'inflic_2_year' => $data1['object2']['2year'],
                 'inflic_3_year' => $data1['object2']['3year'],
@@ -199,7 +183,7 @@ class GetController extends Controller
                 'inflic_5_year' => $data1['object2']['5year'],
             ]
         );
-       inflic::updateOrCreate(
+        Inflic::updateOrCreate(
             [
                 'connect_id' => $calculateid,
                 'item' => 'Аутсорс информационной системы',
@@ -207,8 +191,6 @@ class GetController extends Controller
                 'description' => 'Укажите стоимость аутсорса информационной системы. Затраты берутся из контракта на аутсорс',
             ],
             [
-                //'calculate_id' => $calculateid,
-
                 'inflic_1_year' => $data1['object3']['1year'],
                 'inflic_2_year' => $data1['object3']['2year'],
                 'inflic_3_year' => $data1['object3']['3year'],
@@ -216,176 +198,21 @@ class GetController extends Controller
                 'inflic_5_year' => $data1['object3']['5year'],
             ]
         );
-
-        // Предыдущий вариант сохранения:
-        // dd($data1['object1']['1year']);
-        // dd($data1);
-        /*
-        if ($data1['type'] == "CAPEX") {
-
-            $infr = new inflic;
-            $infr->item = 'Стоимость инфраструктуры';
-            $infr->type = 'CAPEX';
-            $infr->description = 'Укажите общую стоимость инфраструктуры';
-            $infr->guid_id = $calculateid;
-            $infr->inflic_1_year = $data1['object1']['1year'];
-            $infr->inflic_2_year = $data1['object1']['2year'];
-            $infr->inflic_3_year = $data1['object1']['3year'];
-            $infr->inflic_4_year = $data1['object1']['4year'];
-            $infr->inflic_5_year = $data1['object1']['5year'];
-            $infr->save();
-
-            $infr = new inflic;
-            $infr->item = 'Стоимость инфраструктуры (облачная)';
-            $infr->type = 'OPEX';
-            $infr->description = 'Укажите общую стоимость инфраструктуры (облачной)';
-            $infr->guid_id = $calculateid;
-            $infr->inflic_1_year = null;
-            $infr->inflic_2_year = null;
-            $infr->inflic_3_year = null;
-            $infr->inflic_4_year = null;
-            $infr->inflic_5_year = null;
-            $infr->save();
-
-        }
-        else {
-            $infr = new inflic;
-            $infr->item = 'Стоимость инфраструктуры';
-            $infr->type = 'CAPEX';
-            $infr->description = 'Укажите общую стоимость инфраструктуры';
-            $infr->guid_id = $calculateid;
-            $infr->inflic_1_year = null;
-            $infr->inflic_2_year = null;
-            $infr->inflic_3_year = null;
-            $infr->inflic_4_year = null;
-            $infr->inflic_5_year = null;
-            $infr->save();
-
-            $infr = new inflic;
-            $infr->item = 'Стоимость инфраструктуры (облачная)';
-            $infr->type = 'OPEX';
-            $infr->description = 'Укажите общую стоимость инфраструктуры (облачной)';
-            $infr->guid_id = $calculateid;
-            $infr->inflic_1_year = $data1['object1']['1year'];
-            $infr->inflic_2_year = $data1['object1']['2year'];
-            $infr->inflic_3_year = $data1['object1']['3year'];
-            $infr->inflic_4_year = $data1['object1']['4year'];
-            $infr->inflic_5_year = $data1['object1']['5year'];
-            $infr->save();
-
-        }
-
-        $infr = new inflic;
-        $infr->item = 'Сопровождение инфраструктуры';
-        $infr->type = 'CAPEX';
-        $infr->description = 'Укажите общую стоимость сопровождения инфраструктуры (техническая поддержка инфраструктурного ПО и ФОТ обслуживающего персонала)';
-        $infr->guid_id = $calculateid;
-        $infr->inflic_1_year = $data1['object2']['1year'];
-        $infr->inflic_2_year = $data1['object2']['2year'];
-        $infr->inflic_3_year = $data1['object2']['3year'];
-        $infr->inflic_4_year = $data1['object2']['4year'];
-        $infr->inflic_5_year = $data1['object2']['5year'];
-        $infr->save();
-
-        $infr = new inflic;
-        $infr->item = 'Переферийное оборудование';
-        $infr->type = 'OPEX';
-        $infr->description = 'Укажите общую стоимость используемого переферийного оборудования в ИС';
-        $infr->guid_id = $calculateid;
-        $infr->inflic_1_year = $data1['object3']['1year'];
-        $infr->inflic_2_year = $data1['object3']['2year'];
-        $infr->inflic_3_year = $data1['object3']['3year'];
-        $infr->inflic_4_year = $data1['object3']['4year'];
-        $infr->inflic_5_year = $data1['object3']['5year'];
-        $infr->save();
-
-        $data1 = $data['licen'];
-
-        $infr = new inflic;
-        $infr->item = 'Стоимость лицензий/программного обеспечения';
-        $infr->type = 'CAPEX';
-        $infr->description = 'Укажите общую стоимость лицензий/программного обеспечения самой информационной системы. Затраты берутся из контракта на программное обеспечение';
-        $infr->guid_id = $calculateid;
-        $infr->inflic_1_year = $data1['object1']['1year'];
-        $infr->inflic_2_year = $data1['object1']['2year'];
-        $infr->inflic_3_year = $data1['object1']['3year'];
-        $infr->inflic_4_year = $data1['object1']['4year'];
-        $infr->inflic_5_year = $data1['object1']['5year'];
-        $infr->save();
-
-        $infr = new inflic;
-        $infr->item = 'Стоимость технической поддержки информационной системы';
-        $infr->type = 'OPEX';
-        $infr->description = 'Укажите стоимость технической поддержки информационной системы. Затраты берутся из контракта на программное обеспечение';
-        $infr->guid_id = $calculateid;
-        $infr->inflic_1_year = $data1['object2']['1year'];
-        $infr->inflic_2_year = $data1['object2']['2year'];
-        $infr->inflic_3_year = $data1['object2']['3year'];
-        $infr->inflic_4_year = $data1['object2']['4year'];
-        $infr->inflic_5_year = $data1['object2']['5year'];
-        $infr->save();
-
-        $infr = new inflic;
-        $infr->item = 'Аутсорс информационной системы';
-        $infr->type = 'OPEX';
-        $infr->description = 'Укажите стоимость аутсорса информационной системы. Затраты берутся из контракта на аутсорс';
-        $infr->guid_id = $calculateid;
-        $infr->inflic_1_year = $data1['object3']['1year'];
-        $infr->inflic_2_year = $data1['object3']['2year'];
-        $infr->inflic_3_year = $data1['object3']['3year'];
-        $infr->inflic_4_year = $data1['object3']['4year'];
-        $infr->inflic_5_year = $data1['object3']['5year'];
-        $infr->save();
-
-
-
-        if ($data1['type'] == "CAPEX") {
-             $infr = inflic::find(1);
-         }
-         else {
-             $infr = inflic::find(2);
-         }
-         unset($data1['type']);*/
-
-
-        /*$j=2;
-        foreach($data1 as $object) {
-            $infr->calculate_id = $calculateid;
-            $infr->inflic_1_year = $object['1year'];
-            $infr->inflic_2_year = $object['2year'];
-            $infr->inflic_3_year = $object['3year'];
-            $infr->inflic_4_year = $object['4year'];
-            $infr->inflic_5_year = $object['5year'];
-            $infr->save();
-            if ($j < 4) {
-                $j++;
-                $infr = inflic::find($j);
-            }
-
-        }*/
-       /*
-        $j=5;
-        foreach($data1 as $object) {
-            $lics = inflic::find($j);
-            $lics->calculate_id = $calculateid;
-            $lics->inflic_1_year = $object['1year'];
-            $lics->inflic_2_year = $object['2year'];
-            $lics->inflic_3_year = $object['3year'];
-            $lics->inflic_4_year = $object['4year'];
-            $lics->inflic_5_year = $object['5year'];
-            $lics->save();
-            if ($j < 7) $j++;
-        }*/
     }
-    public function createpersonnels($data, $calculateid) {
-        //dd($data);
-        $deleteexistngpersonnel = personnel::where('connect_id', '=', $calculateid)->delete();
+
+    /**
+     * @param $data
+     * @param $calculateid
+     * @return void
+     */
+    public function createPersonnels($data, $calculateid)
+    {
+        $deleteexistngpersonnel = Personnel::where('connect_id', '=', $calculateid)->delete();
 
         $employees = $data['development'];
-        foreach($employees as $employee) {
-            $worker = new personnel();
+        foreach ($employees as $employee) {
+            $worker = new Personnel();
             $worker->team = 'development';
-            //$worker->calculate_id = $calculateid;
             $worker->connect_id = $calculateid;
             $worker->post = $employee['post'];
             $worker->quantity_of_the_rate = $employee['quantity_of_the_rate'];
@@ -395,10 +222,9 @@ class GetController extends Controller
             $worker->save();
         }
         $employees = $data['support'];
-        foreach($employees as $employee) {
-            $worker = new personnel();
+        foreach ($employees as $employee) {
+            $worker = new Personnel();
             $worker->team = 'support';
-           // $worker->calculate_id = $calculateid;
             $worker->connect_id = $calculateid;
             $worker->post = $employee['post'];
             $worker->quantity_of_the_rate = $employee['quantity_of_the_rate'];

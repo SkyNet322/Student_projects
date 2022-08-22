@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class inflic extends Model
+class Inflic extends Model
 {
     use HasFactory;
     protected $fillable = [
-       // 'calculate_id',
         'connect_id',
         'item',
         'type',

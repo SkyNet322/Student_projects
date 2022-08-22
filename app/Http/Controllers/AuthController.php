@@ -9,7 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(request $request) //: array|string
+    /**
+     * @param Request $request
+     * @return array|string
+     */
+    public function login(request $request): array|string //: array|string
     {
         $guard = Auth::guard();
 
@@ -18,8 +22,8 @@ class AuthController extends Controller
             'password' => $request->password
         ];
 
-        if ( ! $guard->attempt($data)) {
-            return('Неправильно дурашка'); //throw new ApiResultException('User doesn\'t exist');
+        if (!$guard->attempt($data)) {
+            return ('Неправильно дурашка'); //throw new ApiResultException('User doesn\'t exist');
         }
 
         $user = $guard->user();
@@ -29,6 +33,20 @@ class AuthController extends Controller
         return [
             'token' => $token
         ];
+    }
 
+    /**
+     * @return string
+     */
+    public function logout(): string
+    {
+        $user = request()->user();
+
+        $user
+            ->tokens()
+            ->where('id', $user->currentAccessToken()->id)
+            ->delete();
+
+        return('logout');
     }
 }
