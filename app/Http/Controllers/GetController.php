@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DataSpecial;
-use App\Models\inflic;
-use App\Models\connect;
-use App\Models\personnel;
+use App\Models\Inflic;
+use App\Models\Connect;
+use App\Models\Personnel;
 use App\Models\calculate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -61,12 +61,12 @@ class GetController extends Controller
             Inflic::updateOrCreate(
                 [
                     'connect_id' => $calculateid,
-                ],
-                [
-                    //'calculate_id' => $calculateid,
                     'item' => 'Стоимость инфраструктуры',
                     'type' => 'CAPEX',
                     'description' => 'Укажите общую стоимость инфраструктуры',
+                ],
+                [
+                    //'calculate_id' => $calculateid,
                     'inflic_1_year' => $data1['object1']['1year'],
                     'inflic_2_year' => $data1['object1']['2year'],
                     'inflic_3_year' => $data1['object1']['3year'],
@@ -156,9 +156,9 @@ class GetController extends Controller
         Inflic::updateOrCreate(
             [
                 'connect_id' => $calculateid,
-                'item' => 'Переферийное оборудование',
-                'type' => 'OPEX',
-                'description' => 'Укажите общую стоимость используемого переферийного оборудования в ИС',
+                'item' => 'Стоимость лицензий/программного обеспечения',
+                'type' => 'CAPEX',
+                'description' => 'Укажите общую стоимость лицензий/программного обеспечения самой информационной системы. Затраты берутся из контракта на программное обеспечение',
             ],
             [
                 'inflic_1_year' => $data1['object1']['1year'],

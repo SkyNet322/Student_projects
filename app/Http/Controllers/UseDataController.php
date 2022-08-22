@@ -36,9 +36,13 @@ class UseDataController extends Controller
 
         if ($guid) {
             if ($guid->connects) {
-                return (new Calculate())->getCalculate($guid->connects);
+                return [
+                    'calculated' => 'true',
+                    'id' => $guid->id
+                ];
             } else {
                 return [
+                    'calculated' => 'false',
                     'id' => $guid->id
                 ];
             }
