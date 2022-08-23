@@ -18,18 +18,6 @@ return new class extends Migration
             $table->integer('user_id');
             $table->timestamps();
         });
-/*
-        Schema::table('personnels', function (Blueprint $table) {
-            $table->integer('calculate_id')->nullable();
-            $table->foreign('calculate_id')->references('id')->on('calculates')->onDelete('cascade');;
-        });
-
-        Schema::table('inflics', function (Blueprint $table) {
-            $table->integer('calculate_id')->nullable();
-            $table->foreign('calculate_id')->references('id')->on('calculates');
-        });
-
-        Schema::enableForeignKeyConstraints();*/
     }
 
     /**

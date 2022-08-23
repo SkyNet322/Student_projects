@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DataSpecial extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'GUID',
         'name',
@@ -21,8 +22,11 @@ class DataSpecial extends Model
         'domain',
         'subdomain',
     ];
+
+    protected $with = 'connects';
+
     public function connects()
     {
-        return $this->hasOne(connects::class);
+        return $this->belongsTo(Connect::class, 'id', 'guid_id');
     }
 }
