@@ -37,7 +37,7 @@ class Calculate extends Model
 
         $massive = [];
 
-        $data = Inflic::where('connect_id', '=', $connect->id)->get();
+        $data = Inflic::orderBy('id')->where('connect_id', '=', $connect->id)->get();
 
         foreach($data as $dat) {
             array_push($massive,
