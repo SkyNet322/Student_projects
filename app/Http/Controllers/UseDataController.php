@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Calculate;
 use App\Models\DataSpecial;
-use App\Models\connect;
+use App\Models\Connect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\lessThanOrEqual;
 use App\Models\inflic;
 use Illuminate\Support\Facades\Auth;
+
+use App\Exports\CalculateExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UseDataController extends Controller
 {
@@ -35,7 +38,7 @@ class UseDataController extends Controller
         }
 
         if ($guid) {
-            if ($guid->connects) {
+            if ($guid->connects && $guid->connects->user_id == Auth::user()->id) {
                 return [
                     'calculated' => 'true',
                     'id' => $guid->id
@@ -49,6 +52,7 @@ class UseDataController extends Controller
         } else {
             return ("something wrong");
         }
+
     }
 
     /**
@@ -58,4 +62,5 @@ class UseDataController extends Controller
     {
         return (DataSpecial::all());
     }
+
 }
