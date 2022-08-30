@@ -31,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     route::get('/getguid', [UseDataController::class, 'sendguid' ]);
 
+    Route::post('/export/', [CalcController::class, 'export']);
+
     route::post('/usedata', [UseDataController::class, 'useguid' ]);
 
     route::post('/getall', [GetController::class, 'store' ]);
