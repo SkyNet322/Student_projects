@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Exports\CalculateExport;
 use App\Models\Calculate;
 use App\Models\Connect;
-use App\Models\personnel;
+use App\Models\Personnel;
 use App\Models\inflic;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -44,6 +45,10 @@ class CalcController extends Controller
             ['guid_id', '=', $guidId]
         ] )->first();
 
-        return Excel::download(new CalculateExport($connect), 'file_of_calculates.xlsx');
+        Excel::store(new CalculateExport($connect),  'file_of_calculates.xlsx', 'public-test');
+
+        $file = new File(public_path().'/upload/file_of_calculates.xlsx');
+
+        return $file->path();
     }
 }
