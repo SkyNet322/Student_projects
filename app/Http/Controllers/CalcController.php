@@ -11,6 +11,7 @@ use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class CalcController extends Controller
@@ -62,10 +63,21 @@ class CalcController extends Controller
             return response()->json($returnData, 200);
         }
 
-        Excel::store(new CalculateExport($connect),  'file_of_calculates.xlsx', 'public-test');
+        $file_path = 'file_of_calculates.xlsx';
+        $disk = 'public-test';
+        Excel::store(new CalculateExport($connect), $file_path, $disk);
+        $exists = Storage::disk($disk)->exists($file_path);
 
-        $file = new File(public_path().'/upload/file_of_calculates.xlsx');
+        if(!$exists) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'Не существует указанного файла'
+            );
+            return response()->json($returnData, 200);
+        }
 
-        return $file->path();
+        $file = Storage::disk($disk)->path($file_path);
+
+        return $file;
     }
 }
