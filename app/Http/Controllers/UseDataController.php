@@ -50,7 +50,11 @@ class UseDataController extends Controller
                 ];
             }
         } else {
-            return ("something wrong");
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'Неправильный номер Guid/Неправильное название ИС'
+            );
+            return response()->json($returnData, 200);
         }
 
     }

@@ -11,6 +11,7 @@ use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class CalcController extends Controller
 {
@@ -18,7 +19,7 @@ class CalcController extends Controller
      * @param Request $request
      * @return array
      */
-    public function calculate(request $request): array
+    public function calculate(request $request): array|string
     {
         $guidId = $request->guid_id;
 
@@ -26,6 +27,14 @@ class CalcController extends Controller
             ['user_id', '=', Auth::id()],
             ['guid_id', '=', $guidId]
             ] )->first();
+
+        if (!$connect) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'Отсутствуют данные для расчёта'
+            );
+            return response()->json($returnData, 200);
+        }
 
         $bigData = (new Calculate())->getCalculate($connect);
 
@@ -44,6 +53,14 @@ class CalcController extends Controller
             ['user_id', '=', Auth::id()],
             ['guid_id', '=', $guidId]
         ] )->first();
+
+        if (!$connect) {
+            $returnData = array(
+                'status' => 'error',
+                'message' => 'Отсутствуют данные для расчёта'
+            );
+            return response()->json($returnData, 200);
+        }
 
         Excel::store(new CalculateExport($connect),  'file_of_calculates.xlsx', 'public-test');
 
